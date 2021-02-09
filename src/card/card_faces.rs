@@ -2,12 +2,11 @@
 //!
 //! For documentation about the fields, please refer to the official scryfall
 //! [documentation](https://scryfall.com/docs/api/cards)
+use std::collections::HashMap;
+
 use serde::{Deserialize, Serialize};
 
-use crate::card::Colour;
-use crate::util::Uuid;
-
-use std::collections::HashMap;
+use crate::{card::Colour, util::Uuid};
 
 /// Sub card object used when a magic card has more then one card face.
 ///

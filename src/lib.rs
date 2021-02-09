@@ -1,7 +1,7 @@
 #![deny(missing_docs)]
 //! [Scryfall](https://scryfall.com) provides a REST-like API for ingesting our card data
-//! programatically. The API exposes information available on the regular site in easy-to-consume
-//! formats.
+//! programatically. The API exposes information available on the regular site
+//! in easy-to-consume formats.
 //!
 //! ## Cards
 //! The main way to fetch cards from this API is the [`Card`] struct.
@@ -53,25 +53,29 @@ pub mod error;
 pub mod format;
 pub mod ruling;
 pub mod set;
-mod util;
 
-/// The result type used to describe all fallible operations of the scryfall crate.
-pub type Result<T> = std::result::Result<T, error::Error>;
+mod util;
 
 pub use card::Card;
 pub use catalog::Catalog;
 pub use ruling::Ruling;
 pub use set::Set;
 
+/// The result type used to describe all fallible operations of the scryfall
+/// crate.
+pub type Result<T> = std::result::Result<T, error::Error>;
+
 #[cfg(test)]
 mod tests {
+    use std::convert::TryFrom;
+
+    use rayon::prelude::*;
+    use serde_json::{from_str, to_string};
+
     use crate::{
         card_searcher::{SearchBuilder, StringParam},
         set::{Set, SetCode},
     };
-    use rayon::prelude::*;
-    use serde_json::{from_str, to_string};
-    use std::convert::TryFrom;
 
     #[test]
     fn set_code_serde_test() {

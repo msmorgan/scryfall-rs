@@ -1,13 +1,14 @@
 //! Module for handling unresolved URLs returned by the scryfall api
 //!
-//! Some fields of the scryfall api have URLs refering to queries that can be run to obtain more
-//! information. This module abstracts the work of fetching that data.
-use crate::error::Error;
-
+//! Some fields of the scryfall api have URLs refering to queries that can be
+//! run to obtain more information. This module abstracts the work of fetching
+//! that data.
 use std::marker::PhantomData;
 
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
 use ureq::{Agent, Response};
+
+use crate::error::Error;
 
 /// A URI that will fetch something of a defined type `T`.
 #[derive(Serialize, Deserialize, Clone, Eq, PartialEq, Ord, PartialOrd, Hash, Debug)]
@@ -43,13 +44,14 @@ impl<T: DeserializeOwned> URI<T> {
     ///
     /// # Examples
     /// ```rust ignore
-    /// use scryfall::{util::uri::URI, card::Card};
+    /// use scryfall::{card::Card, util::uri::URI};
     /// assert_eq!(
     ///     URI::<Card>::from("https://api.scryfall.com/cards/arena/67330")
     ///         .fetch()
     ///         .unwrap()
     ///         .name,
-    ///     Card::arena(67330).unwrap().name)
+    ///     Card::arena(67330).unwrap().name
+    /// )
     /// ```
     pub fn fetch(&self) -> crate::Result<T> {
         url_fetch(&self.0)
@@ -61,7 +63,8 @@ where
     T: DeserializeOwned + 'static,
     I: IntoIterator<Item = T>,
 {
-    /// Fetch the objects of type `T` in the list that this `URL` is pointing to.
+    /// Fetch the objects of type `T` in the list that this `URL` is pointing
+    /// to.
     pub fn iter(&self) -> crate::Result<UriIter<T>> {
         url_fetch_iter(&self.0)
     }
@@ -72,10 +75,10 @@ where
 /// Sometimes the data pointed to by a URL is paginated. In that case a
 /// `PaginatedURI` is needed to iterate over the pages of data.
 ///
-/// When iterating over one, every call to next returns a either a vector of `T` or
-/// an error.
-/// If an `Err` is returned then subsequent calls to `next()` will return `None`,
-/// since the error is likely to repeat after that point.
+/// When iterating over one, every call to next returns a either a vector of `T`
+/// or an error.
+/// If an `Err` is returned then subsequent calls to `next()` will return
+/// `None`, since the error is likely to repeat after that point.
 #[derive(Serialize, Deserialize, Clone, Eq, PartialEq, Ord, PartialOrd, Hash, Debug)]
 #[serde(transparent)]
 pub struct PaginatedURI<T> {
@@ -112,8 +115,8 @@ impl<T: DeserializeOwned> Iterator for PaginatedURI<T> {
 
 thread_local!(static CLIENT: Agent = Agent::new());
 
-/// Transforms a `Response` using the provided function. If the status code indicates an error,
-/// produces an appropriate error instead.
+/// Transforms a `Response` using the provided function. If the status code
+/// indicates an error, produces an appropriate error instead.
 fn map_response<T>(
     response: Response,
     read_json: impl FnOnce(Response) -> serde_json::Result<T>,
@@ -133,12 +136,13 @@ fn map_response<T>(
 ///
 /// # Examples
 /// ```rust ignore
-/// use scryfall::{util::uri::url_fetch, card::Card};
+/// use scryfall::{card::Card, util::uri::url_fetch};
 /// assert_eq!(
-///     url_fetch::<Card,_>("https://api.scryfall.com/cards/arena/67330")
+///     url_fetch::<Card, _>("https://api.scryfall.com/cards/arena/67330")
 ///         .unwrap()
 ///         .name,
-///     Card::arena(67330).unwrap().name)
+///     Card::arena(67330).unwrap().name
+/// )
 /// ```
 pub fn url_fetch<T: DeserializeOwned, I: AsRef<str>>(url: I) -> crate::Result<T> {
     let resp = CLIENT.with(|c| c.get(url.as_ref()).call())?;
@@ -165,7 +169,8 @@ where
     }
 }
 
-/// Utility function to fetch data pointed to by a URL string, into an iterator of T.
+/// Utility function to fetch data pointed to by a URL string, into an iterator
+/// of T.
 pub fn url_fetch_iter<T, U>(url: U) -> crate::Result<UriIter<T>>
 where
     T: DeserializeOwned,
