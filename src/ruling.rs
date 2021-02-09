@@ -120,7 +120,7 @@ impl Ruling {
     ///         rulings
     ///             .unwrap()
     ///             .iter()
-    ///             .filter(|r| r.comment == "If the target spell is an illegal target when Mana Drain tries to resolve, it won’t resolve and none of its effects will happen. You won’t get any mana.")
+    ///             .filter(|r| r.comment.starts_with("If the target spell is an illegal target by the time Mana Drain tries to resolve"))
     ///             .count(),
     ///         1
     ///     ),
