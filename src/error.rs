@@ -33,7 +33,7 @@ pub enum Error {
 /// input you provided to the API.
 ///
 /// [Official docs](https://scryfall.com/docs/api/errors)
-#[derive(Serialize, Deserialize, Clone, Eq, PartialEq, Ord, PartialOrd, Hash, Debug)]
+#[derive(Serialize, Deserialize, Clone, Eq, PartialEq, Hash, Debug)]
 pub struct ScryfallError {
     /// A human-readable string explaining the error.
     pub details: String,

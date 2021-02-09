@@ -5,9 +5,9 @@ use crate::{
     util::{uri::URI, Uuid},
 };
 
-/// Related card object. Cards that are closely related to other cards (because they call them by
-/// name, or generate a token, or meld, etc) have a all_parts property that contains `RelatedCard`
-/// objects.
+/// Related card object. Cards that are closely related to other cards (because
+/// they call them by name, or generate a token, or meld, etc) have a all_parts
+/// property that contains `RelatedCard` objects.
 ///
 /// [Official docs]](https://scryfall.com/docs/api/cards#related-card-objects)
 #[derive(Serialize, Deserialize, Clone, PartialEq, Debug)]
@@ -21,7 +21,7 @@ pub struct RelatedCard {
 }
 
 /// The kind of related card.
-#[derive(Serialize, Deserialize, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash, Debug)]
+#[derive(Serialize, Deserialize, Copy, Clone, Eq, PartialEq, Hash, Debug)]
 #[serde(rename_all = "snake_case")]
 #[allow(missing_docs)]
 #[non_exhaustive]
