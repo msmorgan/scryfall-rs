@@ -9,10 +9,10 @@
 pub mod set_code;
 pub mod set_type;
 
-use super::card::Card;
-use super::util::uri::{url_fetch, PaginatedURI, URI};
-use super::util::Uuid;
-use super::util::{API, API_SETS};
+use crate::card::Card;
+use crate::util::uri::{url_fetch, PaginatedURI, URI};
+use crate::util::Uuid;
+use crate::util::{API, API_SETS};
 #[doc(inline)]
 pub use set_code::SetCode;
 #[doc(inline)]

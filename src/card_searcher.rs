@@ -22,8 +22,8 @@
 //! [`SearchBuilder`]: struct.SearchBuilder.html
 //! [`Search`]: trait.Search.html
 use crate::card::{
-    border_color::BorderColour, color::Colours, frame::Frame, frame_effect::FrameEffect,
-    game::Game, rarity::Rarity, Card,
+    BorderColour, Colours, Frame, FrameEffect,
+    Game, Rarity, Card,
 };
 use crate::format::Format;
 use crate::set::set_code::SetCode;

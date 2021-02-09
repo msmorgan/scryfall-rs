@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 
 use std::convert::AsRef;
 use std::convert::TryFrom;
-use std::fmt::{self, Display, Formatter};
+use std::fmt;
 use std::str;
 
 /// A 3 or 4 letter set code, like 'war' for 'War of the Spark'.
@@ -16,10 +16,10 @@ pub struct SetCode(CodeInner);
 impl SetCode {
     /// Creates a set code from a str.
     ///
-    /// Valid set codes are ascii and 3 our 6 letters long. If any of these conditions
+    /// Valid set codes are ascii between 3 and 6 letters long. If any of these conditions
     /// fails, the conversion fails.
     ///
-    /// The error value is None if the `str` was no ascii, otherwise it holds the size
+    /// The error value is None if the `str` was not ascii, otherwise it holds the size
     /// of the `str`.
     ///
     /// ```rust
@@ -71,7 +71,7 @@ struct SetCodeVisior {
 impl<'de> Visitor<'de> for SetCodeVisior {
     type Value = SetCode;
 
-    fn expecting(&self, f: &mut Formatter) -> fmt::Result {
+    fn expecting(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self.size {
             Some(size) => write!(f, "set code size between 3 and 6, found {}", size),
             None => write!(f, "set code to be ascii"),
@@ -107,8 +107,8 @@ impl Serialize for SetCode {
     }
 }
 
-impl Display for SetCode {
-    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+impl fmt::Display for SetCode {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.get())
     }
 }
