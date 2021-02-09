@@ -108,9 +108,9 @@ mod tests {
             .flatten()
             .take(30)
             .par_bridge()
-            .for_each(|set| {
+            .for_each(|set: Set| {
                 SearchBuilder::new()
-                    .param(StringParam::Set(set.code))
+                    .param(StringParam::Set(set.code.clone()))
                     .search()
                     .enumerate()
                     .for_each(|(i, c)| {

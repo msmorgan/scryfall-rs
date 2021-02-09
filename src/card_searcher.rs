@@ -861,7 +861,7 @@ impl Param for GameParam {
 }
 
 /// A parameter that takes a time string as its value.
-#[derive(Serialize, Deserialize, Copy, Clone, Eq, PartialEq, Hash, Debug)]
+#[derive(Serialize, Deserialize, Clone, Eq, PartialEq, Hash, Debug)]
 pub enum TimeParam {
     /// Find cards that were released relative to a certain year.
     Year(ComparisonExpr, usize),

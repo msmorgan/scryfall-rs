@@ -11,9 +11,10 @@ use serde::{
     Deserialize,
     Serialize,
 };
+use smallvec::SmallVec;
 
 /// A 3 to 6 letter set code, like 'war' for 'War of the Spark'.
-#[derive(Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash, Debug)]
+#[derive(Clone, Eq, PartialEq, Ord, PartialOrd, Hash, Debug)]
 pub struct SetCode(CodeInner);
 
 #[allow(dead_code)]
@@ -53,10 +54,7 @@ impl TryFrom<&str> for SetCode {
         }
         let code = code.as_bytes();
         Ok(SetCode(match code.len() {
-            3 => CodeInner::Code3(<[u8; 3]>::try_from(code).unwrap()),
-            4 => CodeInner::Code4(<[u8; 4]>::try_from(code).unwrap()),
-            5 => CodeInner::Code5(<[u8; 5]>::try_from(code).unwrap()),
-            6 => CodeInner::Code6(<[u8; 6]>::try_from(code).unwrap()),
+            3..=6 => CodeInner(SmallVec::from_slice(code)),
             invalid => return Err(Some(invalid)),
         }))
     }
@@ -69,11 +67,11 @@ impl AsRef<str> for SetCode {
 }
 
 #[derive(Default)]
-struct SetCodeVisior {
+struct SetCodeVisitor {
     size: Option<usize>,
 }
 
-impl<'de> Visitor<'de> for SetCodeVisior {
+impl<'de> Visitor<'de> for SetCodeVisitor {
     type Value = SetCode;
 
     fn expecting(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -99,7 +97,7 @@ impl<'de> Deserialize<'de> for SetCode {
     where
         D: Deserializer<'de>,
     {
-        deserializer.deserialize_str(SetCodeVisior::default())
+        deserializer.deserialize_str(SetCodeVisitor::default())
     }
 }
 
@@ -118,14 +116,8 @@ impl fmt::Display for SetCode {
     }
 }
 
-#[derive(Serialize, Deserialize, Copy, Clone, Eq, PartialEq, Hash, Debug)]
-#[allow(clippy::enum_variant_names)]
-enum CodeInner {
-    Code3([u8; 3]),
-    Code4([u8; 4]),
-    Code5([u8; 5]),
-    Code6([u8; 6]),
-}
+#[derive(Clone, Eq, PartialEq, Hash, Debug)]
+struct CodeInner(SmallVec<[u8; 6]>);
 
 impl PartialOrd for CodeInner {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
@@ -141,12 +133,6 @@ impl Ord for CodeInner {
 
 impl CodeInner {
     fn get(&self) -> &[u8] {
-        use CodeInner::*;
-        match self {
-            Code3(c) => &c[..],
-            Code4(c) => &c[..],
-            Code5(c) => &c[..],
-            Code6(c) => &c[..],
-        }
+        self.0.as_slice()
     }
 }
