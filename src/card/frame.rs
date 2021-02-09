@@ -1,4 +1,3 @@
-//! Enum describing the various magic card frames
 use serde::{Deserialize, Serialize};
 
 /// Enum describing the various magic card frames

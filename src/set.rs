@@ -12,11 +12,8 @@ mod set_type;
 
 use chrono::NaiveDate;
 use serde::{Deserialize, Serialize};
-#[doc(inline)]
-pub use set_code::SetCode;
-#[doc(inline)]
-pub use set_type::SetType;
 
+pub use self::{set_code::SetCode, set_type::SetType};
 use crate::{
     card::Card,
     util::{

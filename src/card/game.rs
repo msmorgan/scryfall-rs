@@ -1,4 +1,3 @@
-//! Enum defining the exiting platforms on with a magic card can exist.
 use serde::{Deserialize, Serialize};
 
 /// Enum defining the exiting platforms on with a magic card can exist.

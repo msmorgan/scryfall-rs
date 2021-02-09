@@ -1,4 +1,3 @@
-//! Enum defining the 5 colors of magic
 use serde::{Deserialize, Serialize};
 
 /// Enum defining the 5 colors of magic

@@ -1,4 +1,3 @@
-//! Module defining a price object containing data in various currencies.
 use serde::{Deserialize, Serialize};
 
 /// Struct defining a price object containing data in various currencies.

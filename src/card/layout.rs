@@ -1,4 +1,3 @@
-//! Enum describing the various layouts a magic card can have.
 use serde::{Deserialize, Serialize};
 
 /// Enum describing the various layouts a magic card can have.

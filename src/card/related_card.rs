@@ -1,8 +1,3 @@
-//! Module defining a related card.
-//!
-//! Cards that are closely related to other cards (because they call them by
-//! name, or generate a token, or meld, etc) have a all_parts property that
-//! contains `RelatedCard` objects.
 use serde::{Deserialize, Serialize};
 
 use crate::{
@@ -10,8 +5,11 @@ use crate::{
     util::{uri::URI, Uuid},
 };
 
-/// Related card object. Refer to the official [docs](https://scryfall.com/docs/api/cards)
-/// for information on the fields.
+/// Related card object. Cards that are closely related to other cards (because they call them by
+/// name, or generate a token, or meld, etc) have a all_parts property that contains `RelatedCard`
+/// objects.
+///
+/// [Official docs]](https://scryfall.com/docs/api/cards#related-card-objects)
 #[derive(Serialize, Deserialize, Clone, PartialEq, Debug)]
 #[allow(missing_docs)]
 pub struct RelatedCard {

@@ -1,7 +1,3 @@
-//! Sub card object used when a magic card has more then one card face.
-//!
-//! For documentation about the fields, please refer to the official scryfall
-//! [documentation](https://scryfall.com/docs/api/cards)
 use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};

@@ -1,4 +1,3 @@
-//! Struct describing card preview information.
 use chrono::NaiveDate;
 use serde::{Deserialize, Serialize};
 

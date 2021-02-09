@@ -18,33 +18,23 @@ mod related_card;
 
 use std::collections::hash_map::HashMap;
 
-#[doc(inline)]
-pub use border_color::BorderColour;
-#[doc(inline)]
-pub use card_faces::CardFace;
 use chrono::NaiveDate;
-#[doc(inline)]
-pub use color::{Colour, Colours};
-#[doc(inline)]
-pub use frame::Frame;
-#[doc(inline)]
-pub use frame_effect::FrameEffect;
-#[doc(inline)]
-pub use game::Game;
-#[doc(inline)]
-pub use layout::Layout;
-#[doc(inline)]
-pub use legality::Legality;
-#[doc(inline)]
-pub use preview::Preview;
-#[doc(inline)]
-pub use price::Price;
-#[doc(inline)]
-pub use rarity::Rarity;
-#[doc(inline)]
-pub use related_card::RelatedCard;
 use serde::{Deserialize, Serialize};
 
+pub use self::{
+    border_color::BorderColour,
+    card_faces::CardFace,
+    color::{Colour, Colours},
+    frame::Frame,
+    frame_effect::FrameEffect,
+    game::Game,
+    layout::Layout,
+    legality::Legality,
+    preview::Preview,
+    price::Price,
+    rarity::Rarity,
+    related_card::RelatedCard,
+};
 use crate::{
     card_searcher::Search,
     ruling::Ruling,

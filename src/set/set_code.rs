@@ -1,4 +1,3 @@
-//! This module defines a set code.
 use std::{
     convert::{AsRef, TryFrom},
     fmt,
@@ -12,7 +11,7 @@ use serde::{
     Serialize,
 };
 
-/// A 3 or 4 letter set code, like 'war' for 'War of the Spark'.
+/// A 3 to 6 letter set code, like 'war' for 'War of the Spark'.
 #[derive(Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash, Debug)]
 pub struct SetCode(CodeInner);
 

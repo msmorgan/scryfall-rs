@@ -1,4 +1,3 @@
-//! Enum defining the colors a mtg card border can have.
 use serde::{Deserialize, Serialize};
 
 /// Enum defining the colors a mtg card border can have.

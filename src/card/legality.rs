@@ -1,4 +1,3 @@
-//! Enum describing the 4 states of legality a card can have.
 use serde::{Deserialize, Serialize};
 
 /// Enum describing the 4 states of legality a card can have.

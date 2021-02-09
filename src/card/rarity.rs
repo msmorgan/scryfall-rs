@@ -1,4 +1,3 @@
-//! Enum defining the 4 different rarities a card can come in.
 use serde::{Deserialize, Serialize};
 
 /// Enum defining the 4 different rarities a card can come in.

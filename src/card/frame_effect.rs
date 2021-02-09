@@ -1,4 +1,3 @@
-//! Enum describing the various frame effects a border can have.
 use serde::{Deserialize, Serialize};
 
 /// Enum describing the various frame effects a border can have.
