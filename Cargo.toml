@@ -10,6 +10,12 @@ readme = "README.md"
 keywords = ["mtg", "Magic", "API", "Scryfall"]
 categories = ["api-bindings", "games"]
 
+[workspace]
+members = [
+    ".",
+    "tools/docs-scraper",
+]
+
 [dependencies]
 chrono = { version = "0.4", features = ["serde"] }
 itertools = "0.9"

@@ -1,0 +1,12 @@
+[package]
+name = "docs-scraper"
+version = "0.1.0"
+authors = ["Michael Morgan <morgan.michael@me.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0.38"
+scraper = "0.12.0"
+ureq = "2.0.1"
