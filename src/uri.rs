@@ -4,7 +4,6 @@
 //! run to obtain more information. This module abstracts the work of fetching
 //! that data.
 use std::marker::PhantomData;
-use std::time::Duration;
 
 use cfg_if::cfg_if;
 use serde::de::DeserializeOwned;
@@ -18,7 +17,7 @@ cfg_if! {
     if #[cfg(feature = "rate_limiter")] {
         use std::time::Duration;
 
-        use crate::util::ratelimit::RateLimitedAgent;
+        use crate::util::rate_limiter::RateLimitedAgent;
 
         thread_local!(static CLIENT: RateLimitedAgent = RateLimitedAgent::new(Duration::from_millis(100)));
     } else {

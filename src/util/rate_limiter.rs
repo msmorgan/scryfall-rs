@@ -1,5 +1,4 @@
 use std::cell::{RefCell, RefMut};
-use std::num::NonZeroUsize;
 use std::sync::mpsc;
 use std::thread;
 use std::time::{Duration, Instant};
@@ -10,6 +9,7 @@ pub struct Limiter {
     capacity: usize,
     available: isize,
     interval: Duration,
+    timestamp: Instant,
     tx: mpsc::SyncSender<(usize, mpsc::Sender<Option<Duration>>)>,
     rx: mpsc::Receiver<(usize, mpsc::Sender<Option<Duration>>)>,
 }
@@ -22,6 +22,7 @@ impl Limiter {
             capacity: 1,
             available: 1,
             interval,
+            timestamp: Instant::now(),
             tx,
             rx,
         }
@@ -43,8 +44,11 @@ impl Limiter {
                 let _ = tx.send(self.request(count));
             }
 
-            thread::sleep(self.interval);
+            if let Some(dur) = self.interval.checked_sub(self.timestamp.elapsed()) {
+                thread::sleep(dur);
+            }
             self.available = (self.available + 1).min(self.capacity as isize);
+            self.timestamp = Instant::now();
         }
     }
 
@@ -59,7 +63,7 @@ impl Limiter {
         if self.available < 0 {
             // If these tokens are not available yet, they will become available
             // as soon as enough are generated.
-            Some(self.interval * (-avaialable) as u32)
+            (self.interval * (-self.available) as u32).checked_sub(self.timestamp.elapsed())
         } else {
             None
         }
@@ -90,6 +94,11 @@ impl Handle {
             panic!("Failed to send to limiter channel.");
         }
     }
+}
+
+pub struct RateLimitedAgent {
+    inner: ureq::Agent,
+    limiter: RefCell<Limiter>,
 }
 
 impl RateLimitedAgent {
