@@ -1,16 +1,8 @@
-use serde::{Deserialize, Serialize};
+use crate::macros::unknown_fallback;
 
+unknown_fallback! {
 /// The finish the card can come in.
-#[derive(Serialize, Deserialize, Clone, Eq, PartialEq, Ord, PartialOrd, Hash, Debug)]
-#[cfg_attr(not(feature = "unknown_variants"), derive(Copy))]
-#[cfg_attr(
-    all(
-        not(feature = "unknown_variants"),
-        not(feature = "unknown_variants_slim")
-    ),
-    non_exhaustive
-)]
-#[cfg_attr(test, serde(deny_unknown_fields))]
+#[derive(Ord, PartialOrd)]
 #[serde(rename_all = "lowercase")]
 #[allow(missing_docs)]
 pub enum PromoType {
@@ -123,19 +115,5 @@ pub enum PromoType {
     UpsideDownBack,
     Vault,
     Wizardsplaynetwork,
-    #[cfg_attr(
-        docsrs,
-        doc(cfg(any(feature = "unknown_variants", feature = "unknown_variants_slim")))
-    )]
-    #[cfg(feature = "unknown_variants")]
-    #[serde(untagged)]
-    /// Unknown variant
-    Unknown(Box<str>),
-    #[cfg_attr(
-        docsrs,
-        doc(cfg(any(feature = "unknown_variants", feature = "unknown_variants_slim")))
-    )]
-    #[cfg(all(not(feature = "unknown_variants"), feature = "unknown_variants_slim"))]
-    #[serde(other)]
-    Unknown,
+}
 }
