@@ -67,6 +67,9 @@
 //! For this the [`search`] module provides a type safe api
 //! to interact and query the search engine. For advanced features like
 //! sorting and collation, see [`search::advanced`].
+mod macros;
+#[cfg(feature = "unknown_variants")]
+mod unknown;
 pub mod bulk;
 pub mod card;
 pub mod catalog;

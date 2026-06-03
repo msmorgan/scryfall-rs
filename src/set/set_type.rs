@@ -2,20 +2,11 @@
 //! property.
 use std::fmt;
 
-use serde::{Deserialize, Serialize};
+use crate::macros::unknown_fallback;
 
+unknown_fallback! {
 /// Scryfall provides an overall categorization for each Set in the set_type
 /// property.
-#[derive(Serialize, Deserialize, Clone, Eq, PartialEq, Hash, Debug)]
-#[cfg_attr(not(feature = "unknown_variants"), derive(Copy))]
-#[cfg_attr(
-    all(
-        not(feature = "unknown_variants"),
-        not(feature = "unknown_variants_slim")
-    ),
-    non_exhaustive
-)]
-#[cfg_attr(test, serde(deny_unknown_fields))]
 #[serde(rename_all = "snake_case")]
 pub enum SetType {
     /// A yearly Magic core set (Tenth Edition, etc)
@@ -68,22 +59,7 @@ pub enum SetType {
     Arsenal,
     /// Mini game sets
     Minigame,
-    #[cfg_attr(
-        docsrs,
-        doc(cfg(any(feature = "unknown_variants", feature = "unknown_variants_slim")))
-    )]
-    #[cfg(feature = "unknown_variants")]
-    #[serde(untagged)]
-    /// Unknown set type
-    Unknown(Box<str>),
-    #[cfg_attr(
-        docsrs,
-        doc(cfg(any(feature = "unknown_variants", feature = "unknown_variants_slim")))
-    )]
-    #[cfg(all(not(feature = "unknown_variants"), feature = "unknown_variants_slim"))]
-    #[serde(other)]
-    /// Unknown set type
-    Unknown,
+}
 }
 
 impl fmt::Display for SetType {
