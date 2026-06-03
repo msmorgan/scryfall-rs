@@ -5,7 +5,7 @@
 /// `#[non_exhaustive]` otherwise.
 ///
 /// Under `unknown_variants` the fallback is `Unknown(UnknownStr)`, an interned
-/// (and therefore `Copy`) string from [`crate::unknown`]. Under `unknown_variants_slim`
+/// (and therefore `Copy`) string (see `UnknownStr`). Under `unknown_variants_slim`
 /// it is a unit `Unknown` via `#[serde(other)]`. With neither feature the enum
 /// has no `Unknown` arm and stays `#[non_exhaustive]`.
 ///

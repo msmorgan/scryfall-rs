@@ -91,6 +91,8 @@ pub use catalog::Catalog;
 pub use error::Error;
 pub use ruling::Ruling;
 pub use set::Set;
+#[cfg(feature = "unknown_variants")]
+pub use unknown::UnknownStr;
 
 #[cfg(test)]
 mod tests {
