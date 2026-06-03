@@ -4,6 +4,8 @@
 - **Status:** Approved pending spec review
 - **Scope:** Phase 1 only. Catalog-driven codegen is a separate, later spec.
 
+> **Correction (2026-06-02, during implementation):** This spec originally specified a *bare* `Unknown(&'static str)` field with a `#[serde(with)]` codec (decision 3, §2–§3, Validation below). That was verified only for standalone deserialization; it does **not** compile when the enum is a field of an outer `#[derive(Deserialize)]` type (`Card`/`Set` embed these enums), because serde infers a `'de: 'static` bound from the reference-typed field. The shipped design instead uses an **owned newtype `UnknownStr`** (a private `&'static str`, chosen over the originally-rejected wrapper because the bare form does not compile). `UnknownStr` behaves like `Box<str>`: `Deref<Target = str>`, content-based `Ord`/`PartialOrd`/`Eq`/`Hash`, `Display`/`Debug` as the underlying string, and `From<&str>`/`From<String>`. It is `Copy` (16 bytes; enums stay `[u8; 24]`), so all stated `Copy` and determinism properties still hold, and `Display` `Unknown` arms keep the original bare `s` via deref coercion. Read the code blocks below with `&'static str` → `UnknownStr` in mind.
+
 ## Problem
 
 scryfall-rs models many Scryfall string-valued fields as Rust enums with

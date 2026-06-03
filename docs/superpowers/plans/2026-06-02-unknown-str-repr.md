@@ -2,7 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Replace the `unknown_variants` fallback payload `Unknown(Box<str>)` with an interned, `Copy` `Unknown(&'static str)` across the six already-netted enums, behind a single `unknown_fallback!` macro.
+**Goal:** Replace the `unknown_variants` fallback payload `Unknown(Box<str>)` with an interned, `Copy` `Unknown(UnknownStr)` across the six already-netted enums, behind a single `unknown_fallback!` macro.
+
+> **Correction (2026-06-02, during execution):** The original plan used a *bare* `Unknown(&'static str)` with `#[serde(with)]`. That does not compile when the enum is a field of an outer `#[derive(Deserialize)]` type (e.g. `Card`/`Set` contain `SetType`): serde infers a `'de: 'static` bound from the reference-typed field (`error: lifetime may not live long enough`). The fix — implemented in Task 1 — is an **owned newtype `UnknownStr`** (private `&'static str` field) that behaves like `Box<str>`: it derefs to `str`, compares/hashes by content, derives `Ord`/`PartialOrd`, renders as the string under `Display`/`Debug`, and provides `From<&str>`. Because it is owned, it composes as a struct field. Consequences for the tasks below: the macro emits `Unknown(crate::unknown::UnknownStr)` (already committed); `Display` `Unknown` arms stay as the original bare `s` (Deref coercion — **no `*s` change**); the size stays `[u8; 24]` and `"foo".into()` still constructs via `From<&str>`. See the committed `src/unknown.rs` for the final `UnknownStr` definition.
 
 **Architecture:** A feature-gated `src/unknown.rs` provides a tiny leak+dedup string interner and a `serde(with)` codec that turns any string into a `&'static str`. A crate-internal `unknown_fallback!` macro (in `src/macros.rs`) emits each enum with its derives, the `non_exhaustive`/`Unknown` cfg-dance, and the interned `Unknown` arm. The six enums are rewritten as macro invocations. Default and slim builds are unaffected; `unknown_variants` builds regain `Copy`.
 
@@ -336,21 +338,9 @@ Delete the two trailing `Unknown` arms (the `#[cfg_attr(docsrs, …)]` … `Unkn
 }
 ```
 
-- [ ] **Step 3: Fix the `Display` arm**
+- [ ] **Step 3: Leave the `Display` arm unchanged**
 
-Replace (currently `src/card/frame_effect.rs:157-158`):
-
-```rust
-                #[cfg(feature = "unknown_variants")]
-                Unknown(s) => s,
-```
-
-with:
-
-```rust
-                #[cfg(feature = "unknown_variants")]
-                Unknown(s) => *s,
-```
+The existing arm `Unknown(s) => s` (currently `src/card/frame_effect.rs:157-158`) already works: `s` is `&UnknownStr`, which deref-coerces to `&str` exactly like the old `&Box<str>` did. **Do not** change it to `*s`. (Per the correction note at the top of this plan.)
 
 - [ ] **Step 4: Verify three modes**
 
