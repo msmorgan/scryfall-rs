@@ -1,20 +1,11 @@
-use serde::{Deserialize, Serialize};
+use crate::macros::unknown_fallback;
 
+unknown_fallback! {
 /// The frame_effects field tracks additional frame artwork applied over a
 /// particular frame. For example, there are both 2003 and 2015-frame cards with
 /// the Nyx-touched effect.
 ///
 /// [Official docs](https://scryfall.com/docs/api/layouts#frame-effects)
-#[derive(Serialize, Deserialize, Clone, Eq, PartialEq, Hash, Debug)]
-#[cfg_attr(not(feature = "unknown_variants"), derive(Copy))]
-#[cfg_attr(
-    all(
-        not(feature = "unknown_variants"),
-        not(feature = "unknown_variants_slim")
-    ),
-    non_exhaustive
-)]
-#[cfg_attr(test, serde(deny_unknown_fields))]
 #[serde(rename_all = "lowercase")]
 pub enum FrameEffect {
     /// Booster Fun
@@ -92,22 +83,7 @@ pub enum FrameEffect {
     Wanted,
     /// Placeholder Image
     PlaceholderImage,
-    #[cfg_attr(
-        docsrs,
-        doc(cfg(any(feature = "unknown_variants", feature = "unknown_variants_slim")))
-    )]
-    #[cfg(feature = "unknown_variants")]
-    #[serde(untagged)]
-    /// Unknown frame effect
-    Unknown(Box<str>),
-    #[cfg_attr(
-        docsrs,
-        doc(cfg(any(feature = "unknown_variants", feature = "unknown_variants_slim")))
-    )]
-    #[cfg(all(not(feature = "unknown_variants"), feature = "unknown_variants_slim"))]
-    #[serde(other)]
-    /// Unknown frame effect
-    Unknown,
+}
 }
 
 impl std::fmt::Display for FrameEffect {
