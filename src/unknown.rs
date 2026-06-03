@@ -100,7 +100,20 @@ impl<'de> Deserialize<'de> for UnknownStr {
 
 #[cfg(test)]
 mod tests {
+    use static_assertions::assert_impl_all;
+
     use super::*;
+    use crate::card::{Finishes, FrameEffect, Layout, PromoType, SecurityStamp};
+    use crate::set::SetType;
+
+    // The headline guarantee of this repr: every netted enum stays `Copy` even
+    // with the string-bearing `Unknown` variant.
+    assert_impl_all!(SetType: Copy);
+    assert_impl_all!(FrameEffect: Copy);
+    assert_impl_all!(Layout: Copy);
+    assert_impl_all!(Finishes: Copy);
+    assert_impl_all!(SecurityStamp: Copy);
+    assert_impl_all!(PromoType: Copy);
 
     #[test]
     fn intern_dedups_to_same_pointer() {
@@ -110,9 +123,15 @@ mod tests {
 
     #[test]
     fn codec_round_trips_through_set_type() {
-        use crate::set::SetType;
         let v: SetType = serde_json::from_str(r#""totally-new-set-type""#).unwrap();
         assert_eq!(v, SetType::Unknown("totally-new-set-type".into()));
         assert_eq!(serde_json::to_string(&v).unwrap(), r#""totally-new-set-type""#);
+    }
+
+    #[test]
+    fn unknown_orders_by_content() {
+        // Finishes derives Ord; Unknown must order lexicographically, not by
+        // interned pointer identity.
+        assert!(Finishes::Unknown("aaa".into()) < Finishes::Unknown("bbb".into()));
     }
 }
