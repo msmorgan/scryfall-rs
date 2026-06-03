@@ -1,5 +1,6 @@
-use serde::{Deserialize, Serialize};
+use crate::macros::unknown_fallback;
 
+unknown_fallback! {
 /// The layout property categorizes the arrangement of card parts, faces, and
 /// other bounded regions on cards. The layout can be used to programmatically
 /// determine which other properties on a card you can expect.
@@ -13,16 +14,6 @@ use serde::{Deserialize, Serialize};
 ///   pointing to the other meld parts.
 ///
 /// [Official docs](https://scryfall.com/docs/api/layouts#layout)
-#[derive(Serialize, Deserialize, Clone, Eq, PartialEq, Hash, Debug)]
-#[cfg_attr(not(feature = "unknown_variants"), derive(Copy))]
-#[cfg_attr(
-    all(
-        not(feature = "unknown_variants"),
-        not(feature = "unknown_variants_slim")
-    ),
-    non_exhaustive
-)]
-#[cfg_attr(test, serde(deny_unknown_fields))]
 #[serde(rename_all = "snake_case")]
 pub enum Layout {
     /// A standard Magic card with one face.
@@ -71,20 +62,5 @@ pub enum Layout {
     Mutate,
     /// Case
     Case,
-    #[cfg_attr(
-        docsrs,
-        doc(cfg(any(feature = "unknown_variants", feature = "unknown_variants_slim")))
-    )]
-    #[cfg(feature = "unknown_variants")]
-    #[serde(untagged)]
-    /// Unknown layout
-    Unknown(Box<str>),
-    #[cfg_attr(
-        docsrs,
-        doc(cfg(any(feature = "unknown_variants", feature = "unknown_variants_slim")))
-    )]
-    #[cfg(all(not(feature = "unknown_variants"), feature = "unknown_variants_slim"))]
-    #[serde(other)]
-    /// Unknown layout
-    Unknown,
+}
 }
